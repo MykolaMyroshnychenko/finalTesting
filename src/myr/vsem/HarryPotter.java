@@ -19,28 +19,26 @@ public class HarryPotter {
 
         //1.1. Download a text about Harry Potter.
         String text = new String(Files.readAllBytes(Paths.get("C:/Users/User/Downloads/harry.txt")));
-        String [] words = text.toLowerCase().replaceAll("[^A-Za-z ]", "").split("\\s");
+        String[] words = text.toLowerCase().replaceAll("[^A-Za-z ]", "").split("\\s");
 
         //1.2. For each distinct word in the text calculate the number of occurrence.
         Map<String, Integer> counterMap = new HashMap<>();
         for (String word : words) {
-            if(!word.isEmpty()) {
+            if (!word.isEmpty()) {
                 Integer count = counterMap.get(word);
-                if(count == null) {
+                if (count == null) {
                     count = 0;
                 }
                 counterMap.put(word, ++count);
             }
         }
 
-        for(String word : counterMap.keySet()) {
+        for (String word : counterMap.keySet()) {
             System.out.println(word + ": " + counterMap.get(word));
         }
 
 
-
-
-
+        // 1.3. Use RegEx
         String[] array = text.split(" +");
 
         List<String> list = Arrays.stream(array).collect(Collectors.toList());
@@ -49,25 +47,25 @@ public class HarryPotter {
 
         Integer value = 0;
         for (int i = 0; i < array.length; i++) {
-            if(!map.containsKey(array[i])){
+            if (!map.containsKey(array[i])) {
                 map.put(array[i], 1);
-            }else {
+            } else {
                 value = map.get(array[i]);
-                map.put(array[i], value + 1 );
+                map.put(array[i], value + 1);
             }
         }
         map.entrySet().stream().limit(20).forEach(System.out::println);
         System.out.println("-------------------------------------------------------------------");
 
 
-
         Map<String, Integer> sorted = new LinkedHashMap<>();
+        // 1.4. Sort in the DESC mode by the number of occurrence
         map.entrySet().stream()
-                .sorted(Map.Entry.<String,Integer>comparingByValue().reversed())
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
                 .forEachOrdered(entry -> sorted.put(entry.getKey(), entry.getValue()));
+        //1.5 Find  the first 20 pairs
+
         sorted.entrySet().stream().limit(20).forEach(System.out::println);
-
-
 
 
         //1.9 Create a fine header for the file
@@ -80,7 +78,7 @@ public class HarryPotter {
 
         //1.8 First 20 pairs and names write into to a file test.txt
 
-        for (Map.Entry<String,Integer> entry : sorted.entrySet()){
+        for (Map.Entry<String, Integer> entry : sorted.entrySet()) {
             counter++;
             sorted20 += entry.getKey() + " " + entry.getValue() + "\n";
             if (counter == 20) break;
@@ -88,5 +86,34 @@ public class HarryPotter {
         String sortedToString = sorted.toString();
         Files.write(Paths.get("C:/Users/User/Downloads/harry.txt"),
                 sorted20.getBytes(StandardCharsets.UTF_8));
+
+
+        // 1.6. Find all the proper names
+
+        String[] word = text.split(" ");
+
+        String stringOfDistincts = "";
+
+        for (int i = 0; i < words.length; i++) {
+
+            if (!stringOfDistincts.contains(words[i])) {
+                stringOfDistincts += words[i] + " ";
+            }
+        }
+        String[] distincts = stringOfDistincts.split(" ");
+
+        int properNames = 0;
+
+        for (int i = 0; i < distincts.length; i++) {
+            if ((distincts[i].charAt(0) > 'A') && (distincts[i].charAt(0) < 'Z')) {
+                distincts[i] = "\n" + distincts[i];
+            }
+        }
     }
 }
+
+
+
+
+
+
